@@ -1,17 +1,7 @@
 ## Ozet
 
-Bu degisikligin amacini kisaca aciklayin.
-
-## Degisiklikler
-
-- 
-
-## Kontrol
-
-- [ ] Ilgili uygulama veya sorgular calistirildi.
-- [ ] Yeni hassas bilgi veya yerel ayar eklenmedi.
-- [ ] Gerekli dokumantasyon guncellendi.
+Bu değişikliğin amacı, staj dönemi kapsamında geliştirilen full-stack PubsApp projesine ait kaynak kodların, SQL veri tabanı betiklerinin ve projenin detaylarını repository'e aktarılmasıdır.
 
 ## Notlar
 
-Inceleyen kisinin bilmesi gereken ek bilgileri yazin.
+Projede Controller ve Minimal API (Authors modülü için) hibrit olarak kullanılmıştır. Kodu yerel ortamda test edecek kullanıcının, frontend için npm install komutunu çalıştırması ve backend'deki appsettings.json dosyasında yer alan SQL Server Connection String ayarını kendi LocalDB yapılandırmasına göre güncellemesi gerekmektedir.
