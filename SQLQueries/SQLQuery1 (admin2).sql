@@ -1,0 +1,1 @@
+﻿DELETE TOP (1) FROM Users WHERE Username = 'admin2';
