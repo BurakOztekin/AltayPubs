@@ -1,0 +1,109 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary">Authors</h2>
+    <button class="btn btn-primary rounded-pill shadow-sm" (click)="openNewForm()" *ngIf="!showForm && authService.isAdmin()">
+      <i class="fas fa-plus me-2"></i> Add New Author
+    </button>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger shadow-sm alert-dismissible fade show" role="alert">
+    <strong>Error!</strong> {{ errorMessage }}
+    <button type="button" class="btn-close" (click)="clearMessages()"></button>
+  </div>
+  <div *ngIf="successMessage" class="alert alert-success shadow-sm alert-dismissible fade show" role="alert">
+    <strong>Success!</strong> {{ successMessage }}
+    <button type="button" class="btn-close" (click)="clearMessages()"></button>
+  </div>
+
+  <div class="card shadow-2-strong mb-4" *ngIf="showForm">
+    <div class="card-header bg-light fw-bold text-primary">
+      {{ isEditing ? 'Edit Author' : 'Add New Author' }}
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label class="form-label">ID (Format: XXX-XX-XXXX)</label>
+          <input type="text" class="form-control" [(ngModel)]="currentAuthor.auId" [disabled]="isEditing">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">First Name</label>
+          <input type="text" class="form-control" [(ngModel)]="currentAuthor.auFname">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Last Name</label>
+          <input type="text" class="form-control" [(ngModel)]="currentAuthor.auLname">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Phone</label>
+          <input type="text" class="form-control" [(ngModel)]="currentAuthor.phone">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Address</label>
+          <input type="text" class="form-control" [(ngModel)]="currentAuthor.address">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">City</label>
+          <input type="text" class="form-control" [(ngModel)]="currentAuthor.city">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">State (2 Chars)</label>
+          <input type="text" class="form-control" [(ngModel)]="currentAuthor.state" maxlength="2">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Zip Code (5 Chars)</label>
+          <input type="text" class="form-control" [(ngModel)]="currentAuthor.zip" maxlength="5">
+        </div>
+        <div class="col-md-1 d-flex align-items-end mb-2">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="currentAuthor.contract" id="contractCheck">
+            <label class="form-check-label" for="contractCheck">Contract</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer bg-white text-end">
+      <button class="btn btn-light me-2" (click)="cancelForm()">Cancel</button>
+      <button class="btn btn-success" (click)="saveAuthor()">Save</button>
+    </div>
+  </div>
+
+  <div class="card shadow-2-strong" *ngIf="!showForm">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 bg-white">
+          <thead class="bg-light">
+            <tr>
+              <th>ID</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Phone</th>
+              <th>City</th>
+              <th class="text-center" *ngIf="authService.isAdmin()">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let a of authors">
+              <td><span class="badge badge-primary rounded-pill d-inline">{{ a.auId }}</span></td>
+              <td class="fw-bold">{{ a.auFname }}</td>
+              <td>{{ a.auLname }}</td>
+              <td>{{ a.phone || '-' }}</td>
+              <td>{{ a.city || '-' }}</td>
+              <td class="text-center" *ngIf="authService.isAdmin()">
+                <button type="button" class="btn btn-link btn-sm btn-rounded text-primary" (click)="editAuthor(a)">
+                  <i class="fas fa-edit"></i> Edit
+                </button>
+                <button type="button" class="btn btn-link btn-sm btn-rounded text-danger" (click)="deleteAuthor(a.auId)">
+                  <i class="fas fa-trash-alt"></i> Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <p *ngIf="!authors || authors.length === 0" class="text-center mt-4 text-muted">
+    <em>Loading authors...</em>
+  </p>
+</div>

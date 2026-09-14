@@ -1,0 +1,110 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary">Titles</h2>
+    <button class="btn btn-primary rounded-pill shadow-sm" (click)="openNewForm()" *ngIf="!showForm && authService.isAdmin()">
+      <i class="fas fa-plus me-2"></i> Add New Title
+    </button>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger shadow-sm alert-dismissible fade show" role="alert">
+    <strong>Error!</strong> {{ errorMessage }}
+    <button type="button" class="btn-close" (click)="clearMessages()"></button>
+  </div>
+  <div *ngIf="successMessage" class="alert alert-success shadow-sm alert-dismissible fade show" role="alert">
+    <strong>Success!</strong> {{ successMessage }}
+    <button type="button" class="btn-close" (click)="clearMessages()"></button>
+  </div>
+
+  <div class="card shadow-2-strong mb-4" *ngIf="showForm">
+    <div class="card-header bg-light fw-bold text-primary">
+      {{ isEditing ? 'Edit Title' : 'Add New Title' }}
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-2">
+          <label class="form-label">ID (Max 6 Chars)</label>
+          <!-- İlk 2 karakter harf, sonraki 4 karakter integer -->
+          <input type="text" class="form-control" [(ngModel)]="currentTitle.titleId" name="titleId" pattern="^[a-zA-Z]{2}[0-9]{4}$" #titleId="ngModel" [disabled]="isEditing" required>
+          <div *ngIf="titleId.invalid && (titleId.dirty || titleId.touched)" class="text-danger mt-1">
+            <small *ngIf="titleId.errors?.required">Title ID is required.</small>
+            <small *ngIf="titleId.errors?.pattern">Format must be 2 letters + 4 digits.</small>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <label class="form-label">Title Name</label>
+          <input type="text" class="form-control" [(ngModel)]="currentTitle.title1">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Type</label>
+          <input type="text" class="form-control" [(ngModel)]="currentTitle.type">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Pub ID</label>
+          <input type="text" class="form-control" [(ngModel)]="currentTitle.pubId">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Price ($)</label>
+          <input type="number" class="form-control" [(ngModel)]="currentTitle.price" name="price" [min]="0" step="0.01" #price="ngModel" required>
+          <div *ngIf="price.invalid && (price.dirty || price.touched)" class="text-danger mt-1">
+            <small *ngIf="price.errors?.min">Price cannot be negative.</small>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">YTD Sales</label>
+          <input type="number" class="form-control" [(ngModel)]="currentTitle.ytdSales" name="ytdSales" [min]="0" step="1" #ytdSales="ngModel" required>
+          <div *ngIf="ytdSales.invalid && (ytdSales.dirty || ytdSales.touched)" class="text-danger mt-1">
+            <small *ngIf="ytdSales.errors?.min">YTD Sales cannot be negative.</small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Notes</label>
+          <input type="text" class="form-control" [(ngModel)]="currentTitle.notes">
+        </div>
+      </div>
+    </div>
+    <div class="card-footer bg-white text-end">
+      <button class="btn btn-light me-2" (click)="cancelForm()">Cancel</button>
+      <button class="btn btn-success" (click)="saveTitle()">Save</button>
+    </div>
+  </div>
+
+  <div class="card shadow-2-strong" *ngIf="!showForm">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 bg-white">
+          <thead class="bg-light">
+            <tr>
+              <th>ID</th>
+              <th>Title Name</th>
+              <th>Type</th>
+              <th>Price</th>
+              <th>YTD Sales</th>
+              <th class="text-center" *ngIf="authService.isAdmin()">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let t of titles">
+              <td><span class="badge badge-success rounded-pill d-inline">{{ t.titleId }}</span></td>
+              <td class="fw-bold">{{ t.title1 }}</td>
+              <td><span class="badge bg-secondary">{{ t.type }}</span></td>
+              <td>{{ t.price ? ('$' + t.price) : '-' }}</td>
+              <td>{{ t.ytdSales != null ? t.ytdSales : '-' }}</td>
+              <td class="text-center" *ngIf="authService.isAdmin()">
+                <button type="button" class="btn btn-link btn-sm btn-rounded text-primary" (click)="editTitle(t)">
+                  <i class="fas fa-edit"></i> Edit
+                </button>
+                <button type="button" class="btn btn-link btn-sm btn-rounded text-danger" (click)="deleteTitle(t.titleId)">
+                  <i class="fas fa-trash-alt"></i> Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <p *ngIf="!titles || titles.length === 0" class="text-center mt-4 text-muted">
+    <em>Loading titles...</em>
+  </p>
+</div>

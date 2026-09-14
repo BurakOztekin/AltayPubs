@@ -1,0 +1,93 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary">Title Authors</h2>
+    <button class="btn btn-primary rounded-pill shadow-sm" (click)="openNewForm()" *ngIf="!showForm && authService.isAdmin()">
+      <i class="fas fa-plus me-2"></i> Add New Relation
+    </button>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger shadow-sm alert-dismissible fade show" role="alert">
+    <strong>Error!</strong> {{ errorMessage }}
+    <button type="button" class="btn-close" (click)="clearMessages()"></button>
+  </div>
+  <div *ngIf="successMessage" class="alert alert-success shadow-sm alert-dismissible fade show" role="alert">
+    <strong>Success!</strong> {{ successMessage }}
+    <button type="button" class="btn-close" (click)="clearMessages()"></button>
+  </div>
+
+  <div class="card shadow-2-strong mb-4" *ngIf="showForm">
+    <div class="card-header bg-light fw-bold text-primary">
+      {{ isEditing ? 'Edit Relation' : 'Add New Relation' }}
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label class="form-label">Author ID</label>
+          <input type="text" class="form-control" [(ngModel)]="currentRelation.auId" [disabled]="isEditing">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Title ID</label>
+          <input type="text" class="form-control" [(ngModel)]="currentRelation.titleId" [disabled]="isEditing">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Author Order</label>
+          <input type="number" class="form-control" [(ngModel)]="currentRelation.auOrd" name="auOrd" [min]="1" step="1" #auOrd="ngModel" required>
+          <div *ngIf="auOrd.invalid && (auOrd.dirty || auOrd.touched)" class="text-danger mt-1">
+            <small *ngIf="auOrd.errors?.min">Author order must be at least 1.</small>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Royalty Percentage</label>
+          <input type="number" class="form-control" [(ngModel)]="currentRelation.royaltyper" name="royaltyper" [min]="1" [max]="100" step="1" #royaltyper="ngModel" required>
+          <div *ngIf="royaltyper.invalid && (royaltyper.dirty || royaltyper.touched)" class="text-danger mt-1">
+            <small *ngIf="royaltyper.errors?.min">Royalty percentage cannot be less than 1.</small>
+            <small *ngIf="royaltyper.errors?.max">Royalty percentage cannot exceed 100.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer bg-white text-end">
+      <button class="btn btn-light me-2" (click)="cancelForm()">Cancel</button>
+      <!-- Kullanıcı Title Authors tablosunda tüm verileri doldurmadan Save tuşu çalışmaz. -->
+      <button class="btn btn-success" (click)="saveRelation()" [disabled]="auOrd.invalid || royaltyper.invalid">Save</button>
+    </div>
+  </div>
+
+  <div class="card shadow-2-strong" *ngIf="!showForm">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 bg-white">
+          <thead class="bg-light">
+            <tr>
+              <th>Author ID</th>
+              <th>Title ID</th>
+              <th>Author Order</th>
+              <th>Royalty Percentage</th>
+              <th class="text-center" *ngIf="authService.isAdmin()">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ta of titleAuthors">
+              <td><span class="badge badge-primary rounded-pill d-inline">{{ ta.auId }}</span></td>
+              <td class="fw-bold">{{ ta.titleId }}</td>
+              <td>{{ ta.auOrd != null ? ta.auOrd : '-' }}</td>
+              <td>{{ ta.royaltyper != null ? (ta.royaltyper + '%') : '-' }}</td>
+              <td class="text-center" *ngIf="authService.isAdmin()">
+                <button type="button" class="btn btn-link btn-sm btn-rounded text-primary" (click)="editRelation(ta)">
+                  <i class="fas fa-edit"></i> Edit
+                </button>
+                <button type="button" class="btn btn-link btn-sm btn-rounded text-danger" (click)="deleteRelation(ta.auId, ta.titleId)">
+                  <i class="fas fa-trash-alt"></i> Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <p *ngIf="!titleAuthors || titleAuthors.length === 0" class="text-center mt-4 text-muted">
+    <em>Loading title authors...</em>
+  </p>
+</div>

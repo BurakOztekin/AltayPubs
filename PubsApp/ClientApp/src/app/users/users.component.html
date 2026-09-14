@@ -1,0 +1,40 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary">User Management</h2>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger shadow-sm alert-dismissible fade show" role="alert">
+    <strong>Error!</strong> {{ errorMessage }}
+  </div>
+
+  <div class="card shadow-2-strong">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 bg-white">
+          <thead class="bg-light">
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users">
+              <td><span class="badge bg-primary rounded-pill d-inline">{{ user.id }}</span></td>
+              <td class="fw-bold">{{ user.username }}</td>
+              <td>
+                <span class="badge"
+                      [ngClass]="{'bg-danger': user.role === 'Admin', 'bg-secondary': user.role === 'User'}">
+                  {{ user.role }}
+                </span>
+              </td>
+            </tr>
+            <tr *ngIf="users.length === 0">
+              <td colspan="3" class="text-center text-muted py-4">No registered users found in the system.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

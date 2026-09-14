@@ -1,3 +1,3 @@
 <Solution>
-  <Project Path="../Projects/Angular-Dotnet/PubsApp/PubsApp.csproj" />
+  <Project Path="PubsApp/PubsApp.csproj" />
 </Solution>

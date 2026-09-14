@@ -1,0 +1,47 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+  <div class="container">
+
+    <a class="navbar-brand fw-bold text-primary" [routerLink]="['/']">ALTAY Pubs</a>
+
+
+    <button class="navbar-toggler"
+            type="button"
+            (click)="toggle()"
+            [attr.aria-expanded]="isExpanded"
+            aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+
+
+    <div class="collapse navbar-collapse" [ngClass]="{ show: isExpanded }" id="navbarNav">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">Home</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/publishers']" [routerLinkActive]="['active']">Publishers</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/titles']" [routerLinkActive]="['active']">Titles</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/authors']" [routerLinkActive]="['active']">Authors</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/titleauthors']" [routerLinkActive]="['active']">Title Authors</a>
+        </li>
+        <li class="nav-item" *ngIf="authService.isAdmin()">
+          <a class="nav-link" [routerLink]="['/users']" [routerLinkActive]="['active']">Users</a>
+        </li>
+        <li class="nav-item" *ngIf="authService.isLoggedIn()">
+          <a class="nav-link fw-bold text-danger" style="cursor: pointer;" (click)="onLogout()">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

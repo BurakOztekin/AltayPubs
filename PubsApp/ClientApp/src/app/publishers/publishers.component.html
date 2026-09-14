@@ -1,0 +1,87 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary">Publishers</h2>
+    <button class="btn btn-primary rounded-pill shadow-sm" (click)="openNewForm()" *ngIf="!showForm && authService.isAdmin()">
+      <i class="fas fa-plus me-2"></i> Add New
+    </button>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger shadow-sm alert-dismissible fade show" role="alert">
+    <strong>Error!</strong> {{ errorMessage }}
+    <button type="button" class="btn-close" (click)="clearMessages()"></button>
+  </div>
+  <div *ngIf="successMessage" class="alert alert-success shadow-sm alert-dismissible fade show" role="alert">
+    <strong>Success!</strong> {{ successMessage }}
+    <button type="button" class="btn-close" (click)="clearMessages()"></button>
+  </div>
+
+  <div class="card shadow-2-strong mb-4" *ngIf="showForm">
+    <div class="card-header bg-light fw-bold text-primary">
+      {{ isEditing ? 'Edit Publisher' : 'Add New Publisher' }}
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-2">
+          <label class="form-label">ID (Max 4 Chars)</label>
+          <input type="text" class="form-control" [(ngModel)]="currentPublisher.pubId" [disabled]="isEditing">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control" [(ngModel)]="currentPublisher.pubName">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">City</label>
+          <input type="text" class="form-control" [(ngModel)]="currentPublisher.city">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">State</label>
+          <input type="text" class="form-control" [(ngModel)]="currentPublisher.state">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Country</label>
+          <input type="text" class="form-control" [(ngModel)]="currentPublisher.country">
+        </div>
+      </div>
+    </div>
+    <div class="card-footer bg-white text-end">
+      <button class="btn btn-light me-2" (click)="cancelForm()">Cancel</button>
+      <button class="btn btn-success" (click)="savePublisher()">Save</button>
+    </div>
+  </div>
+
+  <div class="card shadow-2-strong" *ngIf="!showForm">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 bg-white">
+          <thead class="bg-light">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>City</th>
+              <th>State</th>
+              <th>Country</th>
+              <th class="text-center" *ngIf="authService.isAdmin()">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pub of publishers">
+              <td><span class="badge badge-primary rounded-pill d-inline">{{ pub.pubId }}</span></td>
+              <td class="fw-bold">{{ pub.pubName }}</td>
+              <td>{{ pub.city || '-' }}</td>
+              <td>{{ pub.state || '-' }}</td>
+              <td>{{ pub.country || '-' }}</td>
+              <td class="text-center" *ngIf="authService.isAdmin()">
+                <button type="button" class="btn btn-link btn-sm btn-rounded text-primary" (click)="editPublisher(pub)">
+                  <i class="fas fa-edit"></i> Edit
+                </button>
+                <button type="button" class="btn btn-link btn-sm btn-rounded text-danger" (click)="deletePublisher(pub.pubId)">
+                  <i class="fas fa-trash-alt"></i> Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
