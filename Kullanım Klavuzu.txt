@@ -1,0 +1,89 @@
+Kodun çalışabilmesi için:
+
+1-) VS de PubsApp'ı aç ve F5 e bas.
+
+2-) C:\Users\burak.oztekin.YG0119\Projects\Angular-Dotnet\PubsApp\ClientApp klasör adres çubuğuna tıklayıp cmd yaz. Açılan terminale npm start veya ng serve yaz.
+
+3-) Tarayıcıdan "http://localhost:4200" adresine git.
+
+http://localhost:4200/login
+
+Username: admin
+Password: Adm2025!
+
+Username: standartuser
+Password: User2025!
+
+Username: admin2
+Password: AdminTest*
+
+Username: user2
+Password: AdminTest*
+
+Username: Yonetici
+Password: Sivaslı58*?
+
+Yeni bir kullanıcı eklerken yapılması gerekenler:
+
+
+Admin için:
+INSERT INTO Users (Username, PasswordHash, PasswordSalt, Role) 
+VALUES (
+    'herhangi bir kullanıcı adı yaz', 
+    0x(passwordHash), 
+    0x(passwordSalt), 
+    'Admin'
+);
+
+User için:
+INSERT INTO Users (Username, PasswordHash, PasswordSalt, Role) 
+VALUES (
+    'herhangi bir kullanıcı adı yaz', 
+    0x[IKINCI_F5_HASH_DEGERI], 
+    0x[IKINCI_F5_SALT_DEGERI], 
+    'User'
+);
+
+
+Add New Relation için örnek veriler: 
+
+Publishers: 
+
+ID (Max 4 Chars): 9900 *Primary Key*
+Name: Ankara Teknoloji Yayınları
+City: Ankara
+State: TR
+Country: Türkiye
+
+
+Titles: 
+
+ID (Max 6 Chars): CS1001 *Primary Key*
+Title Name: C# ve .NET ile Gelişmiş Soket Programlama
+Type: popular_comp
+Pub ID: 9900 *Primary Key*
+Price ($): 120.00
+YTD Sales: 58
+Notes: Deneme
+
+Authors:
+
+ID (Format: XXX-XX-XXXX): 999-88-7777 *Primary Key*
+First Name: Burak
+Last Name: Öztekin
+Phone: 555-1010
+Address: Test Adres
+City: Ankara
+State (2 Chars): TR
+Zip Code (5 Chars): 06000 *Primary Key*
+
+Title Authors:
+
+AuthorID: 999-88-7777 *Primary Key*
+TitleID: CS1001 *Primary Key*
+Author Order: 1
+Royalty Percentage: 100
+
+
+Not: Delete işlemi yaparken Publishers eğer Title'a sahipse ilk title silinir. Eğer buradan da silinmezse Authors kısmından bağlı olan kısım silinir.
+Eğer buradan da silinmezse Title Authors kısmında başlayıp geriye doğru silinir.
